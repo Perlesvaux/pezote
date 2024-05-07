@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
+
+    <link href="./bootstrap.min.css" rel="stylesheet">
+    <title>S2T</title>
+
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+
+    <style>
+    .invisible {
+      visibility:hidden;
+    }
+    </style>
+
+</head>
+<body>
+
+  <div class="card bg-primary mb-3 container-sm text-center fs-2" >
+
+    <div class="card-header text-white">Pezote buddy!</div>
+
+    <div class="card-body">
+
+      <form id="stt_form" enctype="multipart/form-data" >
+
+        <div class="mb-3">
+
+          <label for="path2video" class="form-label">
+           <i class="bi bi-plus-circle"></i> Select/drag & drop 
+          </label>      
+
+          <input
+            id="path2video"  
+            type="url" 
+            name="path2video"
+            class="form-control"
+            required
+          />
+
+
+        <!--   <small class="form-text text-muted">  -->
+        <!--       <span class="badge bg-primary"> <i class="bi bi-music-note-beamed"></i> .mp3    </span> -->
+        <!--       <span class="badge bg-light">   <i class="bi bi-music-note-beamed"></i> .mpga   </span>  -->
+        <!--       <span class="badge bg-success"> <i class="bi bi-music-note-beamed"></i> .wav    </span> -->
+        <!--       <span class="badge bg-danger">  <i class="bi bi-camera-video"></i>      .mp4    </span> -->
+        <!--       <span class="badge bg-warning"> <i class="bi bi-camera-video"></i>      .m4a    </span> -->
+        <!--       <span class="badge bg-info">    <i class="bi bi-camera-video"></i>      .mpweg  </span> -->
+        <!--       <span class="badge bg-dark">    <i class="bi bi-camera-video"></i>      .webm   </span> -->
+        <!--   </small> -->
+        <!---->
+        <!---->
+        </div>
+        <!---->
+        <button type="submit" class="btn btn-primary btn-lg fs-1 mb-3">
+          <i class="bi bi-youtube"></i>
+        </button>
+
+        <div id="bar_container" class="invisible">
+          <div class="progress mb-2" >
+            <div id="bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="d-grid gap-2">
+          <a id="download_link" class="invisible btn btn-secondary btn-lg fs-1">
+              <i class="bi bi-download"></i>
+          </a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+
+<script>
+  
+  const path2video = document.getElementById("path2video");
+  const bar = document.getElementById("bar");
+  const bar_container = document.getElementById("bar_container");
+  const link = document.getElementById("download_link")
+  const stt_form = document.getElementById("stt_form")
+
+//   function sendFile(e) {
+//   e.preventDefault();
+//   try {
+//      
+//     // Backend expects to receive a FormData
+//     // with a key named 'sendfile'
+//     // and an audio file as the value.
+//     const item = e.target.sendfile.files[0];
+//     const fd = new FormData();
+//     fd.append('sendfile', item);
+//
+//     // The response from the backend is a File/Blob.
+//     // We first initialize the request, then set 
+//     // the responseType to 'blob'  
+//     const req = new XMLHttpRequest();
+//     req.responseType = 'blob';
+//     
+//     // We monitor the upload property at two stages
+//     // 1- At 'loadstart', to perform some CSS-setup...
+//     req.upload.addEventListener('loadstart', function (e) {
+//         bar_container.classList.toggle("invisible")
+//         link.classList.add("invisible")
+//       })
+//       
+//     // 2- At 'progress', to expand the progress bar 
+//     // accordingly (capped at 80%). Keep going to see why 
+//     req.upload.addEventListener('progress', function (e) {
+//       if (e.lengthComputable) {
+//         const percentComplete = (e.loaded / e.total) * 80;
+//         bar.style.width = percentComplete + "%";
+//       }
+//     });
+//
+//     // Then, we monitor the request itself.
+//     // When it reaches the 'load' stage, it means
+//     // the server has already responded.
+//     // 1- The progress bar is set to reach 100%
+//     // 2- The download link is made visible. We set its 
+//     //    href to a URL made out of the req.response.
+//     //    The downloaded file is named after the original one
+//     // 3- Some CSS-cleanup takes place one second after
+//     //    operation is finished.  
+//     req.addEventListener('load', function () {
+//       bar.style.width = 100 + "%";
+//
+//       link.classList.remove("invisible");
+//       link.href = window.URL.createObjectURL(req.response);
+//       link.download = `${item.name.split(".").slice(0,-1).join(".")}.txt`;
+//
+//       const bye = setTimeout(()=>{
+//         bar_container.classList.toggle("invisible");
+//         bar.style.width = 0 + "%";
+//
+//         clearTimeout(bye)
+//       }, 1000)
+//     });
+//
+//     req.open("POST", 'http://localhost:3000/stt');
+//     req.send(fd);
+//
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
+
+  function sendFile(e) {
+  e.preventDefault();
+  try {
+     
+    // Backend expects to receive a FormData
+    // with a key named 'sendfile'
+    // and an audio file as the value.
+    const item = e.target.path2video.value;
+    const fd = new FormData();
+    fd.append('path2video', item);
+
+    // The response from the backend is a File/Blob.
+    // We first initialize the request, then set 
+    // the responseType to 'blob'  
+    const req = new XMLHttpRequest();
+    req.responseType = 'blob';
+    
+    // We monitor the upload property at two stages
+    // 1- At 'loadstart', to perform some CSS-setup...
+    req.upload.addEventListener('loadstart', function (e) {
+        bar_container.classList.toggle("invisible")
+        link.classList.add("invisible")
+      })
+      
+    // 2- At 'progress', to expand the progress bar 
+    // accordingly (capped at 80%). Keep going to see why 
+    req.upload.addEventListener('progress', function (e) {
+      if (e.lengthComputable) {
+        const percentComplete = (e.loaded / e.total) * 80;
+        bar.style.width = percentComplete + "%";
+      }
+    });
+
+    // Then, we monitor the request itself.
+    // When it reaches the 'load' stage, it means
+    // the server has already responded.
+    // 1- The progress bar is set to reach 100%
+    // 2- The download link is made visible. We set its 
+    //    href to a URL made out of the req.response.
+    //    The downloaded file is named after the original one
+    // 3- Some CSS-cleanup takes place one second after
+    //    operation is finished.  
+    req.addEventListener('load', function () {
+      bar.style.width = 100 + "%";
+
+      link.classList.remove("invisible");
+      link.href = window.URL.createObjectURL(req.response);
+      link.download = `output.txt`;
+
+      const bye = setTimeout(()=>{
+        bar_container.classList.toggle("invisible");
+        bar.style.width = 0 + "%";
+
+        clearTimeout(bye)
+      }, 1000)
+    });
+
+    console.log(item)
+    req.open("POST", 'http://localhost:3000/');
+    // req.setRequestHeader("Content-Type", "text/JSON");
+    // req.setRequestHeader("Content-Type", "text/plain");
+    req.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    // req.send(fd);
+    req.send(new URLSearchParams(fd));
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+  stt_form.addEventListener("submit", sendFile)
+
+</script>
+
+</body>
+</html>
+

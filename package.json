@@ -1,0 +1,19 @@
+{
+  "name": "pezote",
+  "version": "1.0.0",
+  "description": "This fella will help you backup videos your youtube videos!",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Perlesvaux",
+  "license": "GNU",
+  "dependencies": {
+    "express":"^4.19.2",
+    "body-parser":"^1.20.2",
+    "mongoose":"^8.3.3",
+    "dotenv":"^16.4.5",
+    "multer": "^1.4.5-lts.1",
+    "cors":"^2.8.5"
+  }
+}
