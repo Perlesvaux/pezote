@@ -43,6 +43,19 @@
             required
           />
 
+          <label for="outputFormat" class="form-label">
+           <i class="bi bi-plus-circle"></i> Select/drag & drop 
+          </label>      
+
+          <input
+            id="outputFormat"  
+            type="text" 
+            name="outputFormat"
+            class="form-control"
+            required
+          />
+
+
 
         <!--   <small class="form-text text-muted">  -->
         <!--       <span class="badge bg-primary"> <i class="bi bi-music-note-beamed"></i> .mp3    </span> -->
@@ -98,9 +111,11 @@
     // Backend expects to receive a FormData
     // with a key named 'path2video'
     // and a string (URL) as the value.
-    const item = e.target.path2video.value;
+    const _path2video = e.target.path2video.value;
+    const _outputFormat = e.target.outputFormat.value;
     const fd = new FormData();
-    fd.append('path2video', item);
+    fd.append('path2video', _path2video);
+    fd.append('outputFormat', _outputFormat);
 
     // The response from the backend is a File/Blob.
     // We first initialize the request, then set 
@@ -133,16 +148,28 @@
     //    The downloaded file is named after the original one
     // 3- Some CSS-cleanup takes place one second after
     //    operation is finished.  
-    req.addEventListener('load', function () {
-      bar.style.width = 100 + "%";
+    req.addEventListener('load', async function () {
 
 
 
     // console.log(req.getResponseHeader('Content-Disposition'));
     // console.log(req.getResponseHeader('Content-Disposition').split("filename=")[1]);
 
+
+    // const fd = new FormData()
+    // fd.append('path2video', path2video.value)
+      const titlename = await fetch('http://localhost:3000/ask', {method: "POST", headers: {"Content-Type":"application/x-www-form-urlencoded"}, body: new URLSearchParams(fd)})
+      const result = await titlename.text()
+      console.log(result)
+      
+      bar.style.width = 100 + "%";
+
       link.classList.remove("invisible");
       link.href = window.URL.createObjectURL(req.response);
+      link.download = `${result}`;
+
+
+
       // link.download = `outcome.mp3`;
 
       const bye = setTimeout(()=>{
@@ -159,7 +186,7 @@
         // console.log(req.getResponseHeader('Content-Disposition'))
       // })
 
-    console.log(item)
+    // console.log(item)
     req.open("POST", 'http://localhost:3000/');
     // req.setRequestHeader("Content-Type", "text/JSON");
     // req.setRequestHeader("Content-Type", "text/plain");
@@ -176,44 +203,44 @@
 
   stt_form.addEventListener("submit", sendFile)
 
-  path2video.addEventListener('change', async()=>{
-    console.log('elpepe')
-    
-    // const item = path2video.value;
-    // const fd = new FormData();
-    // fd.append('path2video', item);
-    // //
-    // const req = new XMLHttpRequest();
-    // // req.responseType = 'blob';
-    // req.responseType = 'text';
-    // //
-    // req.open("GET", 'http://localhost:3000/ask')
-    // req.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-    // req.send(new URLSearchParams(fd));
-    // //
-    // req.addEventListener('load', ()=>{
-    //   console.log(req.response) 
-    //   // link.download = `outcome.mp3`;
-    // })
-    // 
-    // // console.log(item)
-    //
-
-
- try {
-    const fd = new FormData()
-    fd.append('path2video', path2video.value)
-    const titlename = await fetch('http://localhost:3000/ask', {method: "POST", headers: {"Content-Type":"application/x-www-form-urlencoded"}, body: new URLSearchParams(fd)})
-    const result = await titlename.text()
-    console.log(result)
-    link.download = `${result}`;
-
-
-    } catch (error) {
-      console.error('Error:', error);
-    }
-
-  });
+ //  path2video.addEventListener('change', async()=>{
+ //    console.log('elpepe')
+ //    
+ //    // const item = path2video.value;
+ //    // const fd = new FormData();
+ //    // fd.append('path2video', item);
+ //    // //
+ //    // const req = new XMLHttpRequest();
+ //    // // req.responseType = 'blob';
+ //    // req.responseType = 'text';
+ //    // //
+ //    // req.open("GET", 'http://localhost:3000/ask')
+ //    // req.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+ //    // req.send(new URLSearchParams(fd));
+ //    // //
+ //    // req.addEventListener('load', ()=>{
+ //    //   console.log(req.response) 
+ //    //   // link.download = `outcome.mp3`;
+ //    // })
+ //    // 
+ //    // // console.log(item)
+ //    //
+ //
+ //
+ // try {
+ //    const fd = new FormData()
+ //    fd.append('path2video', path2video.value)
+ //    const titlename = await fetch('http://localhost:3000/ask', {method: "POST", headers: {"Content-Type":"application/x-www-form-urlencoded"}, body: new URLSearchParams(fd)})
+ //    const result = await titlename.text()
+ //    console.log(result)
+ //    link.download = `${result}`;
+ //
+ //
+ //    } catch (error) {
+ //      console.error('Error:', error);
+ //    }
+ //
+ //  });
 
 </script>
 
