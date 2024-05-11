@@ -36,9 +36,9 @@
           </label>      
 
           <input
+            name="path2video"
             id="path2video"  
             type="url" 
-            name="path2video"
             class="form-control"
             required
           />
@@ -47,13 +47,24 @@
            <i class="bi bi-plus-circle"></i> Select/drag & drop 
           </label>      
 
-          <input
-            id="outputFormat"  
-            type="text" 
+          <!-- <input -->
+          <!--   id="outputFormat"   -->
+          <!--   type="text"  -->
+          <!--   name="outputFormat" -->
+          <!--   class="form-control" -->
+          <!--   required -->
+          <!-- /> -->
+
+          <select 
             name="outputFormat"
-            class="form-control"
+            id="outputFormat"
+            class="form-select form-select-sm form-control"
+            aria-label=".form-select-sm example"
             required
-          />
+          >
+            <option value="mp3">Mp3</option>
+            <option value="original">Original</option>
+          </select>
 
 
 
@@ -165,7 +176,7 @@
       bar.style.width = 100 + "%";
 
       link.classList.remove("invisible");
-      link.href = window.URL.createObjectURL(req.response);
+      link.href = URL.createObjectURL(req.response);
       link.download = `${result}`;
 
 
@@ -200,6 +211,10 @@
     console.error(err);
   }
 }
+
+link.addEventListener('click', ()=>{
+    URL.revokeObjectURL(link.href)
+  })
 
   stt_form.addEventListener("submit", sendFile)
 
