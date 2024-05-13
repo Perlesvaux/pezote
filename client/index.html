@@ -135,7 +135,8 @@
 
 
       const titlename = await fetch('http://localhost:3000/ask', {method: "POST", headers: {"Content-Type":"application/x-www-form-urlencoded"}, body: new URLSearchParams(fd)}) 
-      const result = await titlename.text()
+      // const result = await titlename.text()
+      const result = titlename.ok ? await titlename.text() : "result"
       console.log(result)
       
       bar.style.width = 100 + "%";
