@@ -100,18 +100,14 @@
   e.preventDefault();
   try {
      
-    // Backend expects to receive a FormData
-    // with a key named 'path2video'
-    // and a string (URL) as the value.
+    // Backend expects to receive a FormData with a key named 'path2video' and a string (URL) as the value.
     const _path2video = e.target.path2video.value;
     const _outputFormat = e.target.outputFormat.value;
     const fd = new FormData();
     fd.append('path2video', _path2video);
     fd.append('outputFormat', _outputFormat);
 
-    // The response from the backend is a File/Blob.
-    // We first initialize the request, then set 
-    // the responseType to 'blob'  
+    // The response from the backend is a File/Blob. We first initialize the request, then set the responseType to 'blob'.
     const req = new XMLHttpRequest();
     req.responseType = 'blob';
 
@@ -122,8 +118,7 @@
         link.classList.add("invisible")
       })
       
-    // 2- At 'progress', to expand the progress bar 
-    // accordingly (capped at 80%). Keep going to see why 
+    // 2- At 'progress', to expand the progress bar. Accordingly (capped at 80%). Keep going to see why 
     req.upload.addEventListener('progress', function (e) {
       if (e.lengthComputable) {
         const percentComplete = (e.loaded / e.total) * 80;
@@ -131,19 +126,15 @@
       }
     });
 
-    // Then, we monitor the request itself.
-    // When it reaches the 'load' stage, it means
-    // the server has already responded.
-    // 1- The progress bar is set to reach 100%
-    // 2- The download link is made visible. We set its 
-    //    href to a URL made out of the req.response.
-    //    The downloaded file is named after the original one
-    // 3- Some CSS-cleanup takes place one second after
-    //    operation is finished.  
+    // Then, we monitor the request itself. When it reaches the 'load' stage, it means the server has already responded.
+    // 1- Endpoint '/ask' responds with the titlename (used at the link's 'download' attribute)
+    // 2- The progress bar is set to reach 100%.
+    // 3- The download link is made visible. We set its 'href' to a URL made out of the req.response.
+    // 4- Some CSS-cleanup takes place one second after operation is finished.
     req.addEventListener('load', async function () {
 
 
-      const titlename = await fetch('http://localhost:3000/ask', {method: "POST", headers: {"Content-Type":"application/x-www-form-urlencoded"}, body: new URLSearchParams(fd)})
+      const titlename = await fetch('http://localhost:3000/ask', {method: "POST", headers: {"Content-Type":"application/x-www-form-urlencoded"}, body: new URLSearchParams(fd)}) 
       const result = await titlename.text()
       console.log(result)
       
@@ -161,13 +152,6 @@
       }, 1000)
     });
 
-    
-      // req.addEventListener('loadend', function(){
-        // link.download=req.getResponseHeader('Content-Disposition').split("filename=")[1] 
-        // console.log(req.getResponseHeader('Content-Disposition'))
-      // })
-
-    // console.log(item)
     req.open("POST", 'http://localhost:3000/');
     req.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
     req.send(new URLSearchParams(fd));
