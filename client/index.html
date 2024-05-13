@@ -21,7 +21,7 @@
 </head>
 <body>
 
-  <div class="card bg-primary mb-3 container-sm text-center fs-2" >
+  <div class="card border-light mb-3 container-sm text-center fs-2" >
 
     <div class="card-header text-white">Pezote buddy!</div>
 
@@ -32,7 +32,7 @@
         <div class="mb-3">
 
           <label for="path2video" class="form-label">
-           <i class="bi bi-plus-circle"></i> Select/drag & drop 
+           "Bring me some fruit!🙏"
           </label>      
 
           <input
@@ -44,7 +44,7 @@
           />
 
           <label for="outputFormat" class="form-label">
-           <i class="bi bi-plus-circle"></i> Select/drag & drop 
+            🍐🍒🍏🍊🍌
           </label>      
 
           <!-- <input -->
@@ -86,9 +86,19 @@
         <!--   <i class="bi bi-caret-down-fill"></i> -->
         <!-- </button> -->
 
-        <button type="submit" class="btn btn-primary btn-lg fs-1 mb-3">
-          <i class="bi bi-youtube"></i>
-        </button>
+
+        <div>
+          <img src="./images/pezotebuddy.jpeg" width="300px" height="300px" alt="Pezote buddy to the rescue!" usemap="#nose">
+          <map id="nose" name="nose" style="cursor:pointer;">
+              <area shape="circle" coords="275, 175,35">
+            
+          </map>
+        </div>
+
+
+        <!-- <button type="submit" class="btn btn-primary btn-lg fs-1 mb-3"> -->
+        <!--   <i class="bi bi-youtube"></i> -->
+        <!-- </button> -->
 
         <div id="bar_container" class="invisible">
           <div class="progress mb-2" >
@@ -97,8 +107,8 @@
         </div>
 
         <div class="d-grid gap-2">
-          <a id="download_link" class="invisible btn btn-secondary btn-lg fs-1">
-              <i class="bi bi-download"></i>
+          <a id="download_link" class="invisible btn btn-secondary btn-lg">
+            "Thanks! Please take this as a token of appreciation ❤️ "
           </a>
         </div>
 
@@ -112,8 +122,9 @@
   const path2video = document.getElementById("path2video");
   const bar = document.getElementById("bar");
   const bar_container = document.getElementById("bar_container");
-  const link = document.getElementById("download_link")
-  const stt_form = document.getElementById("stt_form")
+  const link = document.getElementById("download_link");
+  const stt_form = document.getElementById("stt_form");
+  const nose = document.getElementById("nose");
 
   function sendFile(e) {
   e.preventDefault();
@@ -214,6 +225,11 @@
 
 link.addEventListener('click', ()=>{
     URL.revokeObjectURL(link.href)
+  })
+
+
+  nose.addEventListener("click", ()=>{
+    stt_form.requestSubmit()
   })
 
   stt_form.addEventListener("submit", sendFile)
