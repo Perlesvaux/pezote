@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: pezote
+    env: node
+    plan: free
+    buildCommand: 'npm install'
+    startCommand: 'npm start'
+    envVars:
+      - key: NODE_ENV
+        value: production
+    build:
+      # Specify any additional build steps needed for your project
+      commands:
+        - 'curl -L https://yt-dlp.org/downloads/latest/yt-dlp -o /usr/local/bin/yt-dlp'
+        - 'chmod a+rx /usr/local/bin/yt-dlp'
+        - 'apt-get update && apt-get install -y ffmpeg'
