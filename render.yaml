@@ -8,7 +8,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-    build:
+    preBuild:
       # Specify any additional build steps needed for your project
       commands:
         - 'curl -L https://yt-dlp.org/downloads/latest/yt-dlp -o /usr/local/bin/yt-dlp'
